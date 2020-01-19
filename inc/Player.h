@@ -5,6 +5,7 @@
 class Player: public Entity	{
 	public:
 		Player();
+		Player(int, int);
 		Player(Player const &);
 		~Player();
 		Player	&operator=(Player const &);

@@ -54,7 +54,7 @@ void	GameState::kill_enemy(int i)
 		if (j + offset < this->enemy_count)
 			arr[j] = this->enemies[j + offset];
 	}
-	delete this->enemies;
+//	delete this->enemies;
 	this->enemies = arr;
 	this->enemy_count--;
 }
@@ -72,7 +72,7 @@ void	GameState::remove_bullet(int i)
 		if (j + offset < this->bullet_count)
 			arr[j] = this->bullets[j + offset];
 	}
-	delete this->bullets;
+//	delete this->bullets;
 	this->bullets = arr;
 	this->bullet_count--;
 }
@@ -85,7 +85,7 @@ void	GameState::spawn_enemies(Player play)
 		int y = rand() % this->y_max;
 		if ((((y - play.y_pos) < 5) || ((play.y_pos - y) < 5)))
 		{
-			if (x > play.x_pos)
+			if (x >= play.x_pos)
 				while (x - play.x_pos < 5)
 					x++;
 			else
@@ -94,7 +94,7 @@ void	GameState::spawn_enemies(Player play)
 		}
 		if ((((x - play.x_pos) < 5) || ((play.x_pos - x) < 5)))
 		{
-			if (y > play.y_pos)
+			if (y >= play.y_pos)
 				while (y - play.y_pos < 5)
 					y++;
 			else
@@ -106,7 +106,7 @@ void	GameState::spawn_enemies(Player play)
 		for (int i = 0; i < this->enemy_count; i++)
 			arr[i] = this->enemies[i];
 		arr[this->enemy_count++] = fren;
-		delete this->enemies;
+//		delete this->enemies;
 		this->enemies = arr;
 		this->spawn_timer = 60 * (rand() % 7);
 	}
@@ -138,7 +138,7 @@ void	GameState::add_bullet(Bullet &shot)
 	for (int i = 0; i < this->bullet_count; i++)
 		arr[i] = this->bullets[i];
 	arr[bullet_count++] = shot;
-	delete this->bullets;
+//	delete this->bullets;
 	this->bullets = arr;
 }
 
@@ -162,6 +162,6 @@ void	GameState::reset()
 	this->score = 0;
 	this->enemy_count = 0;
 	this->bullet_count = 0;
-	delete this->enemies;
-	delete this->bullets;
+//	delete this->enemies;
+//	delete this->bullets;
 }

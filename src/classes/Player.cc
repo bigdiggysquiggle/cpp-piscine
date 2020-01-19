@@ -10,6 +10,15 @@ Player::Player()
 	this->direction = 0;
 }
 
+Player::Player(int x, int y)
+{
+	this->x_pos = x / 2;
+	this->y_pos = y / 2;
+	this->shot_cooldown = 0;
+	this->movement_cooldown = 0;
+	this->direction = 0;
+}
+
 Player::Player(Player const &copy)
 {
 	operator=(copy);

@@ -17,26 +17,26 @@
 //
 //don't spawn enemies within 5 tiles of player
 
-void	draw(GameState game, Player play)
+void	draw(GameState *game, Player play)
 {
 	clear();
-	for (int i = 0; i < game.bullet_count; i++)
+	for (int i = 0; i < game->bullet_count; i++)
 	{
 		char c;
-		if ((game.bullets[i].y_velocity == -1 && game.bullets[i].x_velocity == -1) || (game.bullets[i].y_velocity == 1 && game.bullets[i].x_velocity == 1))
-			c = '/';
-		else if ((game.bullets[i].y_velocity == 1 && game.bullets[i].x_velocity == -1) || (game.bullets[i].y_velocity == -1 && game.bullets[i].x_velocity == 1))
+		if ((game->bullets[i].y_velocity == -1 && game->bullets[i].x_velocity == -1) || (game->bullets[i].y_velocity == 1 && game->bullets[i].x_velocity == 1))
 			c = '\\';
-		else if (game.bullets[i].y_velocity)
+		else if ((game->bullets[i].y_velocity == 1 && game->bullets[i].x_velocity == -1) || (game->bullets[i].y_velocity == -1 && game->bullets[i].x_velocity == 1))
+			c = '/';
+		else if (game->bullets[i].y_velocity)
 			c = '|';
 		else
 			c = '-';
-		mvprintw(game.bullets[i].y_pos, game.bullets[i].x_pos, "%c", c);
+		mvprintw(game->bullets[i].y_pos, game->bullets[i].x_pos, "%c", c);
 	}
-	for (int i = 0; i < game.enemy_count; i++)
-		mvprintw(game.enemies[i].y_pos, game.enemies[i].x_pos, "x");
+	for (int i = 0; i < game->enemy_count; i++)
+		mvprintw(game->enemies[i].y_pos, game->enemies[i].x_pos, "x");
 	mvprintw(play.y_pos, play.x_pos, "o");
-	mvprintw(0, 0, "time: %d\tscore: %d\thighscore: %d", game.in_game_time, game.score, game.high);
+	mvprintw(0, 0, "time: %d\tscore: %d\thighscore: %d", game->in_game_time, game->score, game->high);
 	wrefresh(stdscr);
 }
 
@@ -104,7 +104,8 @@ void	game_loop()
 	int		delta;
 	int		seconds;
 	GameState	game;
-	Player	play;
+	getmaxyx(stdscr, game.y_max, game.x_max);
+	Player	play(game.x_max, game.y_max);
 
 	last_frame = 0;
 	clock_accumulator = 0;
@@ -124,7 +125,7 @@ void	game_loop()
 				game.spawn_enemies(play);
 				game.move_bullets();
 				move_player(&game, &play);
-				draw(game, play);
+				draw(&game, play);
 			}
 			last_frame += clock_accumulator;//might just force this to think 16667
 			clock_accumulator = 0;
@@ -144,8 +145,12 @@ int		main()
 	cbreak();
 	noecho();
 	nodelay(stdscr, TRUE);
+	cbreak();
 	keypad(stdscr, TRUE);
 	srand(time(0));
 	game_loop();
+	clrtoeol();
+	refresh();
+	endwin();
 	return (0);
 }
